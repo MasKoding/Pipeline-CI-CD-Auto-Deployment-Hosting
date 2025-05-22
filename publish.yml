@@ -1,0 +1,29 @@
+name: Publish Website  Mu Ke Hosting Manapun Kuy
+
+on:
+  push:
+    branches:
+      - master # from branch mana 
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install dependencies nya dulu
+        run: npm install
+
+      - name: Build pake npm
+        run: npm run build 
+
+      - name: Publish to build branch (pake action untuk run job lain)
+        uses: s0/git-publish-subdir-action@v2.6.0 #pake versi terbaru supaya running
+        env:
+          REPO: self
+          BRANCH: build  # hasil build disimpen di branch mana
+          FOLDER: dist  # hasil build disimpen di folder apa
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # otomatis dari github nya 
+          MESSAGE: "Build: ({sha}) {msg}" # ini message aja
